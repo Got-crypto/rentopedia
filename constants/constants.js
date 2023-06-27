@@ -1,0 +1,1 @@
+export const navMenu = ["Services", "About Us", "Contacts"]
