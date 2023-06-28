@@ -2,7 +2,7 @@ import axios from "axios";
 
 const { createContext, useContext, useState, useEffect } = require("react");
 
-const context = createContext(null)
+const AppUIUXContext = createContext(null)
 
 export const StateContext = ({children}) => {
     const [isOpen, setIsOpen] = useState(false)
@@ -10,9 +10,14 @@ export const StateContext = ({children}) => {
 
 
     const getUserDetails = async () => {
-        const response = await axios.get('https://randomuser.me/api')
+        try {
+            const response = await axios.get('https://randomuser.me/api')
+            return response   
+        } catch (error) {
+            console.log('error', error)
+            return null
+        }
 
-        return response   
     }
 
     const handleOpenDropdownMenu = () => setIsOpen((state) => !state)
@@ -21,7 +26,7 @@ export const StateContext = ({children}) => {
         const getUser = async () => {
             const response = await getUserDetails()
             
-            const userData = response?.data?.results[0]
+            const userData = response ? response?.data?.results[0] : null
 
             const userCredentials = {
                 username: `${userData?.name?.first} ${userData?.name?.last}`,
@@ -29,19 +34,19 @@ export const StateContext = ({children}) => {
                 picture: userData?.picture?.large
             }
 
-            setUser(userCredentials)
+            setUser(userData ? userCredentials : null)
         }
 
         getUser()
     }, [])
 
-    return <context.Provider value={{
+    return <AppUIUXContext.Provider value={{
         handleOpenDropdownMenu,
         isOpen,
         user,
     }}>
         {children}
-    </context.Provider>
+    </AppUIUXContext.Provider>
 }
 
-export const useStateContext = () => useContext(context)
+export const useStateContext = () => useContext(AppUIUXContext)
