@@ -1,9 +1,10 @@
-import { Hero } from "@/components";
+import { AuthModal, Hero } from "@/components";
 
 export default function Home() {
   return (
     <div className="h-auto w-full flex flex-col bg-base font-roboto">
       <Hero />
+      <AuthModal />
     </div>
   )
 }

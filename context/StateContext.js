@@ -7,6 +7,9 @@ const AppUIUXContext = createContext(null)
 export const StateContext = ({children}) => {
     const [isOpen, setIsOpen] = useState(false)
     const [user, setUser] = useState()
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const handleModalOpenClose = () => setModalOpen(current => !current)
 
 
     const getUserDetails = async () => {
@@ -44,6 +47,8 @@ export const StateContext = ({children}) => {
         handleOpenDropdownMenu,
         isOpen,
         user,
+        handleModalOpenClose,
+        modalOpen
     }}>
         {children}
     </AppUIUXContext.Provider>

@@ -6,7 +6,7 @@ import { Button, Logo, MobileMenu } from ".";
 
 export default function Navbar() {
 
-    const { isOpen, handleOpenDropdownMenu } = useStateContext()
+    const { isOpen, handleOpenDropdownMenu, handleModalOpenClose } = useStateContext()
 
     return (
         <div className="fixed top-0 w-full h-16 bg-primary border-b-1 border-white shadow-sm shadow-black">
@@ -22,7 +22,7 @@ export default function Navbar() {
                     </ul>
                 </div>
                 <div className="hidden md:block">
-                    <Button action={()=>{}} primary={false} text={"Connect to Rentopia"} size={"lg"} />
+                    <Button action={handleModalOpenClose} primary={false} text={"Connect to Rentopia"} size={"lg"} />
                 </div>
                 <div className='block md:hidden'>
                     {isOpen ? (
