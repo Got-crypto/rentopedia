@@ -1,12 +1,13 @@
-import prismadb from '@/lib/prismadb'
-import bcrypt from 'bcrypt'
-import { ObjectId } from 'bson'
+import prismadb from '@/lib/prismadb';
+import bcrypt from 'bcrypt';
+import { ObjectId } from 'bson';
 
 export default async function register(req, res) {
     if( req.method !== 'POST' ) return res.status(405).json({message: 'wrong method for the URL used. Try to use "GET" insted.'})
 
-    try {
-        const { email, password: plainText, username } = req.body
+    try { 
+        const { email, password: plainText, username, picture } = req.body
+        
         
         const emailIsTaken = await prismadb.users.findUnique({
             where: {
@@ -27,12 +28,13 @@ export default async function register(req, res) {
             email,
             username,
             password,
+            picture,
             id: id.toString()
         }
-        
         const response = await prismadb?.users?.create({data})
+        console.log('response', response)
 
-        return res.status(200).json({user: {username, email, id: response.id, photoUrl: ''}})
+        return res.status(200).json({user: {username, email, id: response.id, photoUrl: response.picture}})
     } catch (error) {
         res.status(500).json({message: "server failure", error})
     }

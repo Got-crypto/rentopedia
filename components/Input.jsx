@@ -1,6 +1,6 @@
 export default function Input({name, value, onChange, placeholder, type}) {
     return (
-        <input 
+        <input
             name={name}
             value={value}
             onChange={onChange}

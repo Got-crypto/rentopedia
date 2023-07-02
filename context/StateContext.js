@@ -1,4 +1,5 @@
 import axios from "axios";
+import { signIn } from 'next-auth/react';
 
 const { createContext, useContext, useState, useEffect } = require("react");
 
@@ -13,14 +14,27 @@ export const StateContext = ({children}) => {
 
 
     const getUserDetails = async () => {
+
+    }
+
+    const registerUser = async (credentials) => {
+        const response = await axios.post('http://localhost:3000/api/register', credentials)
+
+        return response
+    }
+
+    const loginUser = async (credentials) => {
+        const { email, password } = credentials
+
         try {
-            const response = await axios.get('https://randomuser.me/api')
-            return response   
+            await signIn("credentials", {
+                email, password, redirect: false
+            })
+
+            handleModalOpenClose()
         } catch (error) {
             console.log('error', error)
-            return null
         }
-
     }
 
     const handleOpenDropdownMenu = () => setIsOpen((state) => !state)
@@ -47,8 +61,10 @@ export const StateContext = ({children}) => {
         handleOpenDropdownMenu,
         isOpen,
         user,
+        registerUser,
         handleModalOpenClose,
-        modalOpen
+        modalOpen,
+        loginUser
     }}>
         {children}
     </AppUIUXContext.Provider>

@@ -9,7 +9,7 @@ import { Button } from ".";
 
 export default function MobileMenu() {
 
-    const { isOpen, user} = useStateContext();
+    const { isOpen, user, handleModalOpenClose} = useStateContext();
 
     return (
         <motion.div initial={{x: 1000}} animate={{
@@ -26,7 +26,7 @@ export default function MobileMenu() {
                     </div>
                 ) : (
                     <div className="mt-5">
-                        <Button size={'lg'} action={()=>{}} text={"Connect to Rentopedia"} primary={false} />
+                        <Button size={'lg'} action={handleModalOpenClose} text={"Connect to Rentopedia"} primary={false} />
                     </div>
                 )
 }
