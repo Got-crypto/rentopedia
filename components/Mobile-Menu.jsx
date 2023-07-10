@@ -4,7 +4,9 @@ import Image from "next/image";
 
 import { BiLink, BiLogOut } from "react-icons/bi";
 
+import { Google } from "@/assets";
 import { navMenu } from "@/constants/constants";
+import { signIn } from "next-auth/react";
 import { Button } from ".";
 
 export default function MobileMenu() {
@@ -26,7 +28,7 @@ export default function MobileMenu() {
                     </div>
                 ) : (
                     <div className="mt-5">
-                        <Button size={'lg'} action={handleModalOpenClose} text={"Connect to Rentopedia"} primary={false} />
+                        <Button size={'lg'} action={async () => signIn('google')} icon={Google} text={"Connect to Rentopedia"} primary={false} />
                     </div>
                 )
 }

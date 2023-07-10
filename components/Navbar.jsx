@@ -1,12 +1,17 @@
-import { BiMenu, BiX } from 'react-icons/bi';
+"use client"
 
+import { BiLogOut, BiMenu, BiX } from 'react-icons/bi';
+
+import { Google } from '@/assets';
 import { navMenu } from '@/constants/constants';
 import { useStateContext } from '@/context/StateContext';
+import { signIn, signOut } from 'next-auth/react';
+import Image from 'next/image';
 import { Button, Logo, MobileMenu } from ".";
 
 export default function Navbar() {
 
-    const { isOpen, handleOpenDropdownMenu, handleModalOpenClose } = useStateContext()
+    const { isOpen, handleOpenDropdownMenu, user } = useStateContext()
 
     return (
         <div className="fixed top-0 w-full h-16 bg-primary border-b-1 border-white shadow-sm shadow-black">
@@ -22,7 +27,29 @@ export default function Navbar() {
                     </ul>
                 </div>
                 <div className="hidden md:block">
-                    <Button action={handleModalOpenClose} primary={false} text={"Connect to Rentopia"} size={"lg"} />
+                    {user ? (
+                        <div className='flex flex-row justify-center items-center gap-3 h-10'>
+                            <p className='text-white cursor-default'>Hello, {user.username}</p>
+                            <Image
+                                src={user.picture}
+                                alt={`${user.username}'s profile`}
+                                height={40}
+                                width={40}
+                                className="rounded-full border-2 border-white object-cover"
+                            />
+                            <button onClick={() => signOut()}>
+                                <BiLogOut className='text-white cursor-pointer' size={20}/>
+                            </button>
+                        </div>
+                    ) : (
+                        <Button
+                            icon={Google}
+                            action={async () => signIn('google', {callbackUrl: '/'})}
+                            primary={false}
+                            text={"Connect to Rentopia"}
+                            size={"lg"}
+                        />
+                    )}
                 </div>
                 <div className='block md:hidden'>
                     {isOpen ? (
@@ -36,7 +63,7 @@ export default function Navbar() {
                     ) }
                 </div>
             </div>
-            <div className='fixed md:hidden w-full flex flex-row justify-end'>
+            <div className='fixed w-full flex flex-row justify-end'>
                 <MobileMenu />
             </div>
         </div>

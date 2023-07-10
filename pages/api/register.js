@@ -9,7 +9,7 @@ export default async function register(req, res) {
         const { email, password: plainText, username, picture } = req.body
         
         
-        const emailIsTaken = await prismadb.users.findUnique({
+        const emailIsTaken = await prismadb.user.findUnique({
             where: {
                 email
             }
@@ -31,7 +31,7 @@ export default async function register(req, res) {
             picture,
             id: id.toString()
         }
-        const response = await prismadb?.users?.create({data})
+        const response = await prismadb?.user?.create({data})
         console.log('response', response)
 
         return res.status(200).json({user: {username, email, id: response.id, photoUrl: response.picture}})

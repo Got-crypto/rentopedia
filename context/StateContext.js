@@ -1,5 +1,5 @@
 import axios from "axios";
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 const { createContext, useContext, useState, useEffect } = require("react");
 
@@ -9,12 +9,12 @@ export const StateContext = ({children}) => {
     const [isOpen, setIsOpen] = useState(false)
     const [user, setUser] = useState()
     const [modalOpen, setModalOpen] = useState(false)
+    const {data} = useSession()
 
     const handleModalOpenClose = () => setModalOpen(current => !current)
 
-
-    const getUserDetails = async () => {
-
+    const getUserDetails = () => {
+        return data?.user
     }
 
     const registerUser = async (credentials) => {
@@ -27,9 +27,11 @@ export const StateContext = ({children}) => {
         const { email, password } = credentials
 
         try {
-            await signIn("credentials", {
+            const user = await signIn("credentials", {
                 email, password, redirect: false
             })
+
+            console.log('user', user)
 
             handleModalOpenClose()
         } catch (error) {
@@ -40,22 +42,22 @@ export const StateContext = ({children}) => {
     const handleOpenDropdownMenu = () => setIsOpen((state) => !state)
 
     useEffect(() => {
-        const getUser = async () => {
-            const response = await getUserDetails()
+        const getUser = () => {
+            const response = getUserDetails()
             
-            const userData = response ? response?.data?.results[0] : null
+            const userData = response ? response : null
 
             const userCredentials = {
-                username: `${userData?.name?.first} ${userData?.name?.last}`,
+                username: userData?.name,
                 email: userData?.email,
-                picture: userData?.picture?.large
+                picture: userData?.image
             }
 
             setUser(userData ? userCredentials : null)
         }
 
         getUser()
-    }, [])
+    }, [data])
 
     return <AppUIUXContext.Provider value={{
         handleOpenDropdownMenu,
