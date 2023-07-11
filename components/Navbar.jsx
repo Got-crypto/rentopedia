@@ -63,7 +63,7 @@ export default function Navbar() {
                     ) }
                 </div>
             </div>
-            <div className='fixed w-full flex flex-row justify-end'>
+            <div className={`fixed ${isOpen ? 'flex' : 'hidden'} w-fit right-0 flex-row justify-end`}>
                 <MobileMenu />
             </div>
         </div>
