@@ -1,7 +1,12 @@
 import { Button } from '@/components';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 export default function Create() {
+
+    const session = useSession()
+
   const [propertyData, setPropertyData] = useState({
     title: '',
     description: '',
@@ -9,20 +14,17 @@ export default function Create() {
     currency: '',
     location: '',
     type: '',
+    purpose: '',
     bedrooms: 0,
     bathrooms: 0,
     area: '',
+    areaUnit: '',
     thumbnail: '',
-    amenities: ["",
-    "",
-    "",
-    "",],
-    images: [
-        "",
-        "",
-        "",
-        "",
-    ],
+    amenities: "",
+    image1: null,
+    image2: null,
+    image3: null,
+    image4: null,
     contact: '',
   });
 
@@ -30,6 +32,41 @@ export default function Create() {
     const { name, value } = e.target;
     setPropertyData((prevData) => ({ ...prevData, [name]: value }));
   };
+
+  const handleUploadImage = (imageName) => {
+    const input = document.createElement('input')
+    input.setAttribute('type', 'file')
+    input.setAttribute('accept', 'image/*')
+    
+    input.click()
+    
+    input.addEventListener('change', (inputTarget) => {
+        const file = URL.createObjectURL(inputTarget.target.files[0])
+
+        setPropertyData({...propertyData, [imageName]: file})
+
+    })
+
+  }
+
+  const handleAddProperty = async () => {
+    const { amenities: ameData, area, areaUnit, bathrooms, bedrooms, contact, currency, description, location, price, thumbnail, title, type, purpose } = propertyData
+
+    const amenities = ameData.split(", ")
+
+    const email = session?.data?.user?.email
+
+    const data = {
+        amenities, area, areaUnit, bathrooms, bedrooms, contact, currency, description, location, price, thumbnail, title, type, purpose,
+        images: [propertyData.image1, propertyData.image2, propertyData.image3, propertyData.image4]
+    }
+    
+    try {
+        await axios.post('http://localhost:3000/api/create', {data, email})
+    } catch (error) {
+        console.log('error', error)
+    }
+  }
 
   return (
     <div className="max-w-md mx-auto p-8">
@@ -112,6 +149,19 @@ export default function Create() {
         />
       </div>
       <div className="mb-4">
+        <label className="block mb-2 text-gray-700" htmlFor="type">
+          Purpose
+        </label>
+        <input
+          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+          type="text"
+          id="purpose"
+          name="purpose"
+          value={propertyData.purpose}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="mb-4">
         <label className="block mb-2 text-gray-700" htmlFor="bedrooms">
           Bedrooms
         </label>
@@ -151,95 +201,94 @@ export default function Create() {
         />
       </div>
       <div className="mb-4">
-        <label className="block mb-2 text-gray-700" htmlFor="thumbnail">
-          Thumbnail
+        <label className="block mb-2 text-gray-700" htmlFor="area">
+          Area Unit
         </label>
         <input
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
           type="text"
-          id="thumbnail"
-          name="thumbnail"
-          value={propertyData.thumbnail}
+          id="area unit"
+          name="areaUnit"
+          value={propertyData.areaUnit}
           onChange={handleChange}
         />
+      </div>
+      <div className="mb-4">
+        <label className="block mb-2 text-gray-700" htmlFor="thumbnail">
+          Thumbnail
+        </label>
+        <div 
+            name="image2"
+            onClick={() => handleUploadImage('thumbnail')} 
+            className='w-full px-4 py-2 border-dashed border-2 text-center rounded-md focus:border-blue-500'
+        >
+            {propertyData.thumbnail ? (
+                <p className='text-ellipsis'>{propertyData.thumbnail}</p>
+            ) : (
+                <p className='text-sm font-bold text-gray-400'>upload image</p>
+            )}
+        </div>
       </div>
       <div className="mb-4">
         <label className="block mb-2 text-gray-700" htmlFor="amenities">
           Amenities
         </label>
-        <input
+        <textarea
           className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          type="text"
           id="amenities"
           name="amenities"
-          value={propertyData.amenities[0]}
+          value={propertyData.amenities}
           onChange={handleChange}
-        />
-        <input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          type="text"
-          id="amenities"
-          name="amenities"
-          value={propertyData.amenities[1]}
-          onChange={handleChange}
-        />
-        <input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          type="text"
-          id="amenities"
-          name="amenities"
-          value={propertyData.amenities[2]}
-          onChange={handleChange}
-        />
-        <input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          type="text"
-          id="amenities"
-          name="amenities"
-          value={propertyData.amenities[3]}
-          onChange={handleChange}
-        />
+        ></textarea>
       </div>
       <div className="mb-4">
         <label className="block mb-2 text-gray-700" htmlFor="images">
           Images
         </label>
-        <input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          type="input"
-          accept="image/*"
-          id="images"
-          name="images"
-          value={propertyData.images[0]}
-          onChange={handleChange}
-        />
-        <input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          type="input"
-          accept="image/*"
-          id="images"
-          name="images"
-          value={propertyData.images[1]}
-          onChange={handleChange}
-        />
-        <input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          type="input"
-          accept="image/*"
-          id="images"
-          name="images"
-          value={propertyData.images[2]}
-          onChange={handleChange}
-        />
-        <input
-          className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-          type="input"
-          accept="image/*"
-          id="images"
-          name="images"
-          value={propertyData.images[3]}
-          onChange={handleChange}
-        />
+        <div 
+            name="image1"
+            onClick={() => handleUploadImage('image1')} 
+            className='w-full px-4 py-2 border-dashed border-2 text-center rounded-md focus:border-blue-500'
+        >
+            {propertyData.image1 ? (
+                <p className='text-ellipsis'>{propertyData.image1}</p>
+            ) : (
+                <p className='text-sm font-bold text-gray-400'>upload image</p>
+            )}
+        </div>
+        <div 
+            name="image2"
+            onClick={() => handleUploadImage('image2')} 
+            className='w-full px-4 py-2 border-dashed border-2 text-center rounded-md focus:border-blue-500'
+        >
+            {propertyData.image2 ? (
+                <p className='text-ellipsis'>{propertyData.image2}</p>
+            ) : (
+                <p className='text-sm font-bold text-gray-400'>upload image</p>
+            )}
+        </div>
+        <div 
+            name="image3"
+            onClick={() => handleUploadImage('image3')} 
+            className='w-full px-4 py-2 border-dashed border-2 text-center rounded-md focus:border-blue-500'
+        >
+            {propertyData.image3 ? (
+                <p className='text-ellipsis'>{propertyData.image3}</p>
+            ) : (
+                <p className='text-sm font-bold text-gray-400'>upload image</p>
+            )}
+        </div>
+        <div 
+            name="image4"
+            onClick={() => handleUploadImage('image4')} 
+            className='w-full px-4 py-2 border-dashed border-2 text-center rounded-md focus:border-blue-500'
+        >
+            {propertyData.image4 ? (
+                <p className='text-ellipsis'>{propertyData.image4}</p>
+            ) : (
+                <p className='text-sm font-bold text-gray-400'>upload image</p>
+            )}
+        </div>
       </div>
       <div className="mb-4">
         <label className="block mb-2 text-gray-700" htmlFor="contact">
@@ -258,7 +307,7 @@ export default function Create() {
       <Button
         text={"Create Property"}
         size={"lg"}
-        action={()=>{}}
+        action={handleAddProperty}
         primary={true}
         
       />

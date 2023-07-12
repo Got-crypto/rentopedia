@@ -23,10 +23,12 @@ model Property {
   price          Int
   currency       String
   location       String
+  purpose        String
   type           String
   bedrooms       Int
   bathrooms      Int?
   area           Float?
+  areaUnit       String?
   thumbnail      String
   amenities      Json[]
   images         Json[]

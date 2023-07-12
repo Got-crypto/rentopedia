@@ -7,6 +7,7 @@ import { navMenu } from '@/constants/constants';
 import { useStateContext } from '@/context/StateContext';
 import { signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button, Logo, MobileMenu } from ".";
 
 export default function Navbar() {
@@ -29,7 +30,6 @@ export default function Navbar() {
                 <div className="hidden md:block">
                     {user ? (
                         <div className='flex flex-row justify-center items-center gap-3 h-10'>
-                            <p className='text-white cursor-default'>Hello, {user.username}</p>
                             <Image
                                 src={user.picture}
                                 alt={`${user.username}'s profile`}
@@ -37,6 +37,14 @@ export default function Navbar() {
                                 width={40}
                                 className="rounded-full border-2 border-white object-cover"
                             />
+                            <Link href={'/create'}>
+                                <Button
+                                    text={"Add Property"}
+                                    primary={false}
+                                    size={"lg"}
+                                    action={null}
+                                />
+                            </Link>
                             <button onClick={() => signOut()}>
                                 <BiLogOut className='text-white cursor-pointer' size={20}/>
                             </button>
