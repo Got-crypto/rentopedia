@@ -6,7 +6,7 @@ import { BiLink, BiLogOut } from "react-icons/bi";
 
 import { Google } from "@/assets";
 import { navMenu } from "@/constants/constants";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { Button } from ".";
 
 export default function MobileMenu() {
@@ -42,11 +42,13 @@ export default function MobileMenu() {
                         </li>
                     ))}
                 </ul>
-                <div className="mt-10 w-full flex flex-row justify-end">
-                <button>
-                        <BiLogOut color="#fff" size={40}/>
-                    </button>
-                </div>
+                {user && (
+                    <div className="mt-10 w-full flex flex-row justify-end">
+                        <button onClick={signOut}>
+                            <BiLogOut color="#fff" size={40}/>
+                        </button>
+                    </div>
+                )}
             </div>
         </motion.div>
     )

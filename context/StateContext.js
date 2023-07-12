@@ -5,10 +5,17 @@ const { createContext, useContext, useState, useEffect } = require("react");
 
 const AppUIUXContext = createContext(null)
 
+const isProduction = process.env.NODE_ENV === 'production'
+
+const serverUrl = isProduction ? process.env.SERVER_URL : 'http://localhost:3000'
+
 export const StateContext = ({children}) => {
     const [isOpen, setIsOpen] = useState(false)
     const [user, setUser] = useState()
     const [modalOpen, setModalOpen] = useState(false)
+    const [propertiesForRent, setPropertiesForRent] = useState()
+    const [propertiesForSale, setPropertiesForSale] = useState()
+
     const {data} = useSession()
 
     const handleModalOpenClose = () => setModalOpen(current => !current)
@@ -18,7 +25,7 @@ export const StateContext = ({children}) => {
     }
 
     const registerUser = async (credentials) => {
-        const response = await axios.post('http://localhost:3000/api/register', credentials)
+        const response = await axios.post(`${serverUrl}/api/register`, credentials)
 
         return response
     }
@@ -41,6 +48,22 @@ export const StateContext = ({children}) => {
 
     const handleOpenDropdownMenu = () => setIsOpen((state) => !state)
 
+    const handleGetProperties = async () => {
+        try {
+            const rentResponse = await axios.get(`${serverUrl}/api/properties/for-rent`)
+            const saleResponse = await axios.get(`${serverUrl}/api/properties/for-sale`)
+
+            const propertiesForSale = saleResponse?.data
+            const propertiesForRent = rentResponse?.data
+            
+            return { propertiesForRent, propertiesForSale }
+        } catch (error) {
+            console.log('error', error)
+            return { propertiesForRent: null, propertiesForSale: null }
+        }
+
+    }
+
     useEffect(() => {
         const getUser = () => {
             const response = getUserDetails()
@@ -59,6 +82,17 @@ export const StateContext = ({children}) => {
         getUser()
     }, [data])
 
+    useEffect(()=> {
+        const getProperties = async () => {
+            const { propertiesForRent, propertiesForSale } = await handleGetProperties()
+
+            setPropertiesForRent(propertiesForRent)
+            setPropertiesForSale(propertiesForSale)
+        }
+
+        getProperties()
+    }, [data])
+
     return <AppUIUXContext.Provider value={{
         handleOpenDropdownMenu,
         isOpen,
@@ -66,7 +100,9 @@ export const StateContext = ({children}) => {
         registerUser,
         handleModalOpenClose,
         modalOpen,
-        loginUser
+        loginUser,
+        propertiesForRent,
+        propertiesForSale
     }}>
         {children}
     </AppUIUXContext.Provider>

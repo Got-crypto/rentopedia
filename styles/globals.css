@@ -7,3 +7,14 @@
 .center-transform {
     transform-origin: center center;
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 4px;
+}
+  
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 12px;
+}

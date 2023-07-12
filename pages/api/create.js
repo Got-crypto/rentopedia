@@ -10,12 +10,13 @@ export default async function handler(req, res) {
                 email
             }
         })
-        const {area, bathrooms, bedrooms, price} = data
+        const {area, bathrooms, bedrooms, price, purpose} = data
 
          try {
             await prisma?.property?.create({
                 data: {
                     ...data,
+                    purpose: purpose.toLowerCase(),
                     area: parseFloat(area),
                     bathrooms: parseInt(bathrooms),
                     bedrooms: parseInt(bedrooms),
