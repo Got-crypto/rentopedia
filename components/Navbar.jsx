@@ -15,7 +15,7 @@ export default function Navbar() {
     const { isOpen, handleOpenDropdownMenu, user } = useStateContext()
 
     return (
-        <div className="fixed top-0 w-full h-16 bg-primary border-b-1 border-white shadow-sm shadow-black">
+        <div className="fixed top-0 w-full h-16 bg-primary border-b-1 z-50 border-white shadow-sm shadow-black">
             <div className="h-full w-full flex flex-row justify-between items-center px-10">
                 <div>
                     <Logo />

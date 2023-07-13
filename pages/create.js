@@ -43,6 +43,12 @@ export default function Create() {
     input.addEventListener('change', (inputTarget) => {
         const file = URL.createObjectURL(inputTarget.target.files[0])
 
+        const reader = new FileReader()
+        reader.readAsDataURL(inputTarget.target.files[0])
+        reader.onload = () => {
+          console.log('reader.result', reader.result)
+        }
+
         setPropertyData({...propertyData, [imageName]: file})
 
     })

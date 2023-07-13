@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Footer(){
     return (
-        <div className="w-full h-10 flex flex-row justify-center items-center pb-10">
+        <div className="w-full h-10 flex flex-row justify-center items-center pb-10 mt-10">
             <Image
                 src={Afk}
                 height={60}

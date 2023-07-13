@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     
             res.status(200).json({propertiesForSale})
         } catch (error) {
-            res.status(500).end()
+            res.status(500).json({error})
         }
     } else res.status(403).json({message: 'wrong method used. Use GET instead'})
 }

@@ -1,9 +1,9 @@
-import prismadb from '@/lib/prismadb'
+import prisma from '@/lib/prismadb'
 
 export default async function handler(req, res) {
     if(req.method === 'GET') {
         try {
-            const propertiesForRent =  await prismadb.property.findMany({
+            const propertiesForRent =  await prisma.property.findMany({
                 where: {
                     purpose: {
                         contains: 'rent',
@@ -18,7 +18,8 @@ export default async function handler(req, res) {
     
             res.status(200).json({propertiesForRent})
         } catch (error) {
-            res.status(500).end()
+            console.log('error', error)
+            res.status(500).json({error})
         }
     } else res.status(403).json({message: 'wrong method used. Use GET instead'})
 }

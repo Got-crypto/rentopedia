@@ -9,7 +9,8 @@ import Logo from "./Logo";
 import MobileMenu from "./Mobile-Menu";
 import Navbar from "./Navbar";
 import PropertiesContainer from "./PropertiesContainer";
+import PropertyCard from "./PropertyCard";
 import UnAuthHeroSection from "./UnAuthHeroSection";
 
-export { AuthHeroSection, AuthModal, Button, Footer, Hero, Input, LandingPage, Logo, MobileMenu, Navbar, PropertiesContainer, UnAuthHeroSection };
+export { AuthHeroSection, AuthModal, Button, Footer, Hero, Input, LandingPage, Logo, MobileMenu, Navbar, PropertiesContainer, PropertyCard, UnAuthHeroSection };
 

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["randomuser.me", "lh3.googleusercontent.com"]
+    domains: ["randomuser.me", "lh3.googleusercontent.com", "localhost"]
   },
   env: {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
