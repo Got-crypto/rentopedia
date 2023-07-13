@@ -1,11 +1,13 @@
 import { Button } from '@/components';
-import axios from 'axios';
+import { useStateContext } from '@/context/StateContext';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 export default function Create() {
 
     const session = useSession()
+
+    const {uploadImage, uploadProperty} = useStateContext()
 
   const [propertyData, setPropertyData] = useState({
     title: '',
@@ -46,29 +48,37 @@ export default function Create() {
         const reader = new FileReader()
         reader.readAsDataURL(inputTarget.target.files[0])
         reader.onload = () => {
-          console.log('reader.result', reader.result)
+          setPropertyData({...propertyData, [imageName]: reader.result})
         }
 
-        setPropertyData({...propertyData, [imageName]: file})
 
     })
 
   }
 
   const handleAddProperty = async () => {
-    const { amenities: ameData, area, areaUnit, bathrooms, bedrooms, contact, currency, description, location, price, thumbnail, title, type, purpose } = propertyData
+    const { amenities: ameData, area, areaUnit, bathrooms, bedrooms, contact, currency, description, location, price, thumbnail: base64Thumbnail, title, type, purpose } = propertyData
 
     const amenities = ameData.split(", ")
+
+    const image = await uploadImage(base64Thumbnail)
+    const intImage1 = await uploadImage(propertyData.image1)
+    const intImage2 = await uploadImage(propertyData.image2)
+    const intImage3 = await uploadImage(propertyData.image3)
+    const intImage4 = await uploadImage(propertyData.image4)
+
+    console.log('image', image)
 
     const email = session?.data?.user?.email
 
     const data = {
-        amenities, area, areaUnit, bathrooms, bedrooms, contact, currency, description, location, price, thumbnail, title, type, purpose,
-        images: [propertyData.image1, propertyData.image2, propertyData.image3, propertyData.image4]
+        amenities, area, areaUnit, bathrooms, bedrooms, contact, currency, description, location, price, title, type, purpose,
+        thumbnail: image?.url,
+        images: [intImage1?.url, intImage2?.url, intImage3?.url, intImage4?.url],
     }
     
     try {
-        await axios.post('http://localhost:3000/api/create', {data, email})
+        await uploadProperty({data, email})
     } catch (error) {
         console.log('error', error)
     }

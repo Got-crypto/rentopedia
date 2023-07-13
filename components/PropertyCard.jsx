@@ -1,15 +1,13 @@
 import Image from "next/image";
 
 const PropertyCard = ({property}) => {
-  let url = property.thumbnail
-  console.log('url', url)
   return (
     <div className="h-full w-full flex flex-col">
       <div>
         <Image
-          src={`${url}`}
+          src={property.thumbnail}
           alt="house"
-          className="object-cover"
+          className="object-cover h-72 w-52"
           height={200}
           width={200}
         />

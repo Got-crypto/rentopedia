@@ -20,6 +20,25 @@ export const StateContext = ({children}) => {
 
     const handleModalOpenClose = () => setModalOpen(current => !current)
 
+    const uploadImage = async (image) => {
+        try {
+            const response = await axios.post(`${serverUrl}/api/upload-images`, {path: image})
+            console.log('response?.data?.result', response?.data)
+            return response?.data?.result
+        } catch (error) {
+            console.log('error', error)
+        }
+
+    }
+
+    const uploadProperty = async (data) => {
+        try {
+            await axios.post(`${serverUrl}/api/create`, data)
+        } catch (error) {
+            console.log('error', error)
+        }
+    }
+
     const getUserDetails = () => {
         return data?.user
     }
@@ -102,7 +121,9 @@ export const StateContext = ({children}) => {
         modalOpen,
         loginUser,
         propertiesForRent,
-        propertiesForSale
+        propertiesForSale,
+        uploadImage,
+        uploadProperty
     }}>
         {children}
     </AppUIUXContext.Provider>

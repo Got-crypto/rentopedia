@@ -35,6 +35,7 @@ model Property {
   available      Boolean  @default(true)
   contact        Json[]
   listedOn       DateTime @default(now())
+  buyerUserId    String?
   postedByUserId String   @db.ObjectId
   postedBy       User     @relation(fields: [postedByUserId], references: [id])
 }

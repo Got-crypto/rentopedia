@@ -16,6 +16,7 @@
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "bson": "^5.3.0",
+    "cloudinary": "^1.37.3",
     "faker": "^6.6.6",
     "framer-motion": "^10.12.17",
     "jsonwebtoken": "^9.0.1",
