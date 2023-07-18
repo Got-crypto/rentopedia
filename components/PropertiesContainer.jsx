@@ -28,7 +28,7 @@ export default function PropertiesContainer({properties, title, filters}) {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 mt-10 w-full mx-auto  gap-5">
                 {propertiesData ? (
                     propertiesData?.map((property, index) => (
-                        <div key={`${property.title}-${index}`} className="h-[500px] w-[450px]">
+                        <div key={`${property.title}-${index}`} className="h-auto w-[450px]">
                             <PropertyCard
                                 property={property}
                             />

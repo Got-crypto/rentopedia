@@ -3,7 +3,7 @@ import { useStateContext } from "@/context/StateContext"
 import { PropertiesContainer } from "."
 
 export default function LandingPage() {
-    const {propertiesForRent} = useStateContext()
+    const {propertiesForRent, propertiesForSale} = useStateContext()
 
     return (
         <div className="h-auto w-full">
@@ -13,6 +13,12 @@ export default function LandingPage() {
                     properties={propertiesForRent}
                     filters={filters}
                 />
+                <div className="h-20"/>
+                {/* <PropertiesContainer
+                    title={'Properties for Sale'}
+                    properties={propertiesForSale}
+                    filters={filters}
+                /> */}
             </div>
         </div>
     )

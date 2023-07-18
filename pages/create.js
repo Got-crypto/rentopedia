@@ -7,7 +7,7 @@ export default function Create() {
 
     const session = useSession()
 
-    const {uploadImage, uploadProperty} = useStateContext()
+    const {uploadImage, uploadProperty, resizeImage} = useStateContext()
 
   const [propertyData, setPropertyData] = useState({
     title: '',
@@ -42,16 +42,20 @@ export default function Create() {
     
     input.click()
     
-    input.addEventListener('change', (inputTarget) => {
-        const file = URL.createObjectURL(inputTarget.target.files[0])
-
+    input.addEventListener('change', async (inputTarget) => {
+        const file = inputTarget.target.files[0]
         const reader = new FileReader()
-        reader.readAsDataURL(inputTarget.target.files[0])
+
+        const resizedImage = await resizeImage(file, 800, 800, .7)
+
+        console.log('resizedImage', resizedImage)
+
+        console.log('imageName', imageName)
+
+        reader.readAsDataURL(resizedImage)
         reader.onload = () => {
           setPropertyData({...propertyData, [imageName]: reader.result})
         }
-
-
     })
 
   }

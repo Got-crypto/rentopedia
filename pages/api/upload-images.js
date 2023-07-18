@@ -24,9 +24,9 @@ export default async function handler(req, res){
 
             const result = await cloudinary.uploader.upload(path, options)
 
-            return res.status(200).json({result}, {status: 200})
+            return res.status(200).json(result, {status: 200})
         } catch (error) {
-            res.status(500).json({error}, {status: 500})
+            res.status(500).json(error, {status: 500})
         }
     } else res.status(403).end()
 }
